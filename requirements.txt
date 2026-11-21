@@ -1,0 +1,16 @@
+torch 
+torchvision 
+numpy
+wandb
+glog
+UMNN
+gdown
+kornia
+timm
+psutil
+safetensors
+tensorboardX
+scipy
+scikit-learn
+tqdm
+Pillow
