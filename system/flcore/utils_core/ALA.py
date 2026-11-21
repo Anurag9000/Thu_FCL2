@@ -70,6 +70,8 @@ class ALA:
         # randomly sample partial local training data
         rand_ratio = self.rand_percent / 100
         rand_num = int(rand_ratio*len(self.train_data))
+        if rand_num <= 0:
+            return
         rand_idx = random.randint(0, len(self.train_data)-rand_num)
 
         indices = list(range(rand_idx, rand_idx + rand_num))
@@ -119,6 +121,7 @@ class ALA:
         losses = []  # record losses
         cnt = 0  # weight training iteration counter
         while True:
+            loss_value = None
             for x, y in rand_loader:
                 if type(x) == type([]):
                     x[0] = x[0].to(self.device)
@@ -141,6 +144,8 @@ class ALA:
                                                         params_gp, self.weights):
                     param_t.data = param + (param_g - param) * weight
 
+            if loss_value is None:
+                return
             losses.append(loss_value.item())
             cnt += 1
 

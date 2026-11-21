@@ -147,7 +147,7 @@ class clientFCIL(Client):
     def update_new_set(self):
         self.model.eval()
         self.signal = False
-        self.signal = self.entropy_signal(self.load_train_data())
+        self.signal = self.entropy_signal(self.load_train_data(task=self.current_task))
 
         if self.signal and (self.last_class != None):
             self.learned_numclass += len(self.last_class)

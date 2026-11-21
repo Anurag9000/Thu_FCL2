@@ -1,3 +1,4 @@
+import os
 from os import name
 import time, copy, inspect
 from xmlrpc import client
@@ -232,8 +233,8 @@ class FedAvg(Server):
                     if i == self.global_rounds - 1:
                         try:
                             print(f"Saving model for client {client.id} at task {task}...")
-                            save_dir = "/kaggle/working/checkpoints"
-                            # os.makedirs(save_dir, exist_ok=True)
+                            save_dir = os.path.join(self.save_folder, "checkpoints")
+                            os.makedirs(save_dir, exist_ok=True)
 
                             save_path = f"{save_dir}/client_{client.id}_task_{task}.pt"
                             for name, param in client.model.state_dict().items():

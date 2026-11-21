@@ -43,7 +43,7 @@ class GLFCServer(Server):
                 self.aggregate_parameters()
                 self.best_global = copy.deepcopy(self.global_model)
                 self._aggregate_prototypes()
-                self.print_result(glob_iter)
+                self.test_metrics(task, glob_iter, flag="global")
 
         self.save_results()
 

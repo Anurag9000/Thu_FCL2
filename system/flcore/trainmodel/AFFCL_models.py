@@ -132,6 +132,11 @@ class AFFCLModel(nn.Module):
             flow_params = 0
         logger.info("Classifier model has %.3f M parameters; Flow model has %.3f M parameters", class_params / 1e6, flow_params / 1.0e6)
 
+    def forward(self, x):
+        # The generic server evaluation path expects a class-score tensor.
+        # AFFCL training uses the richer classifier outputs directly.
+        return self.classifier(x)[0]
+
     def to(self, device):
         self.classifier.to(device)
         if self.algorithm=='PreciseFCL':

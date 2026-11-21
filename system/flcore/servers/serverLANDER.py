@@ -56,6 +56,6 @@ class LANDERServer(Server):
                 self.receive_models()
                 self.aggregate_parameters()
                 self.best_global = copy.deepcopy(self.global_model)
-                self.print_result(glob_iter)
+                self.test_metrics(task, glob_iter, flag="global")
 
         self.save_results()
