@@ -211,16 +211,25 @@ class FedTARGET(Server):
                 self._round_tag = glob_iter
                 t0_round = time.time()
 
+                # Pick the blackout client before any per-round client interaction.
+                # This keeps the drop-one client absent from both teacher/synthetic
+                # preparation and the model broadcast/update paths below.
+                blackout_preselected = self.participation_mode == "drop_one"
+                if blackout_preselected:
+                    self.selected_clients = self.select_clients()
+
                 # TARGET: at task > 0, prep synthetic data + KD teacher per client BEFORE training
                 if task > 0:
-                    for u in self.clients:
+                    prep_clients = self.selected_clients if blackout_preselected else self.clients
+                    for u in prep_clients:
                         u.old_network = copy.deepcopy(self.old_network)
                         u.syn_data_loader = u.get_syn_data_loader()
                         u.it = DataIter(u.syn_data_loader)
                         u.old_network = u.old_network.to(self.device)
 
                 # (1) select clients
-                self.selected_clients = self.select_clients()
+                if not blackout_preselected:
+                    self.selected_clients = self.select_clients()
                 sel_ids = [self._cid(c, j) for j, c in enumerate(self.selected_clients)]
 
                 # header
